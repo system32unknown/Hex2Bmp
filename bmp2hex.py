@@ -7,6 +7,14 @@ Usage:
 
 import sys
 
+def format_bytes(bytes: float, precision: int = 2) -> str:
+    units = ["Bytes", "kB", "MB", "GB", "TB", "PB"]
+    cur_unit = 0
+    while bytes >= 1024 and cur_unit < len(units) - 1:
+        bytes /= 1024
+        cur_unit += 1
+    return f"{round(bytes, precision)}{units[cur_unit]}"
+
 def bmp_to_hex(input_path:str, output_path:str = None):
     with open(input_path, "rb") as f:
         data = f.read()
@@ -18,7 +26,8 @@ def bmp_to_hex(input_path:str, output_path:str = None):
     hex_string = data.hex()
     hex_string = hex_string.upper()
 
-    print(f"Hex length: {len(hex_string)} characters ({len(hex_string) // 2} bytes)")
+    len_hex = len(hex_string)
+    print(f"Hex length: {len_hex} characters ({format_bytes(len_hex // 2)})")
 
     if output_path:
         with open(output_path, "w") as f:
